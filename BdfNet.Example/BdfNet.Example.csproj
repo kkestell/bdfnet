@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PublishAot>true</PublishAot>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Fonts\courR10.bdf" />
+    <None Remove="Fonts\courR12.bdf" />
+    <None Remove="Fonts\courR14.bdf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Fonts\courR10.bdf" />
+    <EmbeddedResource Include="Fonts\courR12.bdf" />
+    <EmbeddedResource Include="Fonts\courR14.bdf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Raylib-cs" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BdfNet\BdfNet.csproj" />
+  </ItemGroup>
+
+</Project>
