@@ -22,7 +22,6 @@
     <EmbeddedResource Include="Fonts\courR12.bdf" />
     <EmbeddedResource Include="Fonts\courR14.bdf" />
     <EmbeddedResource Include="Fonts\spleen-12x24.bdf" />
-    <EmbeddedResource Include="Fonts\unifont-15.1.04.bdf" />
   </ItemGroup>
 
   <ItemGroup>
