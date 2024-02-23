@@ -7,6 +7,8 @@ public class BdfFont
     public int ResolutionX { get; set; }
     public int ResolutionY { get; set; }
     public int[] FontBoundingBox { get; set; } // Width, Height, X-Offset, Y-Offset    
+    public int Ascent { get; set; }
+    public int Descent { get; set; }
     public Dictionary<int, BdfChar> Characters { get; set; } = [];
 
     public static BdfFont Load(string path)
@@ -28,7 +30,7 @@ public class BdfFont
             if (lines.Count == 0)
                 break;
 
-            string line = lines.Dequeue();
+            var line = lines.Dequeue();
 
             if (line.StartsWith("FONT "))
             {
@@ -45,10 +47,18 @@ public class BdfFont
             {
                 var parts = line.Substring(16).Trim().Split(' ');
                 font.FontBoundingBox = new int[4];
-                for (int i = 0; i < 4; i++)
+                for (var i = 0; i < 4; i++)
                 {
                     font.FontBoundingBox[i] = int.Parse(parts[i]);
                 }
+            }
+            else if (line.StartsWith("FONT_ASCENT"))
+            {
+                font.Ascent = int.Parse(line.Substring(12).Trim());
+            }
+            else if (line.StartsWith("FONT_DESCENT"))
+            {
+                font.Descent = int.Parse(line.Substring(13).Trim());
             }
             else if (line.StartsWith("STARTPROPERTIES"))
             {
@@ -103,30 +113,27 @@ public class BdfFont
                     bitmapLines.Add(line.Trim());
                 }
 
-                if (currentChar != null)
+                currentChar.Bitmap = new byte[currentChar.Height, currentChar.Width];
+
+                for (var row = 0; row < currentChar.Height; row++)
                 {
-                    currentChar.Bitmap = new byte[currentChar.Height, currentChar.Width];
-
-                    for (int row = 0; row < currentChar.Height; row++)
+                    var hexLine = bitmapLines[row];
+                    for (var col = 0; col < currentChar.Width; col += 8)
                     {
-                        string hexLine = bitmapLines[row];
-                        for (int col = 0; col < currentChar.Width; col += 8)
-                        {
-                            var byteValue = Convert.ToByte(hexLine.Substring(col / 4, 2), 16);
+                        var byteValue = Convert.ToByte(hexLine.Substring(col / 4, 2), 16);
 
-                            for (int bit = 0; bit < 8; bit++)
+                        for (var bit = 0; bit < 8; bit++)
+                        {
+                            if (col + bit < currentChar.Width)
                             {
-                                if (col + bit < currentChar.Width)
-                                {
-                                    currentChar.Bitmap[row, col + bit] = (byte)((byteValue >> (7 - bit)) & 1);
-                                }
+                                currentChar.Bitmap[row, col + bit] = (byte)((byteValue >> (7 - bit)) & 1);
                             }
                         }
                     }
-
-                    font.Characters.TryAdd(currentChar.Encoding, currentChar);
-                    currentChar = null;
                 }
+
+                font.Characters.TryAdd(currentChar.Encoding, currentChar);
+                currentChar = null;
             }
         }
 
