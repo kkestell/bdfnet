@@ -19,14 +19,14 @@ class Program
         var font = BdfFont.Load(stream);
         var aChar = font.Characters[0x61];
 
-        var glyphImage = Raylib.GenImageColor(font.FontBoundingBox[0], font.FontBoundingBox[1], Color.WHITE);
-        for (int row = 0; row < aChar.Height; row++)
+        var glyphImage = Raylib.GenImageColor(font.FontBoundingBox[0], font.FontBoundingBox[1], Color.White);
+        for (var row = 0; row < aChar.Height; row++)
         {
-            for (int col = 0; col < aChar.Width; col++)
+            for (var col = 0; col < aChar.Width; col++)
             {
                 if (aChar.Bitmap[row, col] == 1)
                 {
-                    Raylib.ImageDrawPixel(ref glyphImage, col, row, Color.BLACK);
+                    Raylib.ImageDrawPixel(ref glyphImage, col, row, Color.Black);
                 }
             }
         }
@@ -38,9 +38,9 @@ class Program
         while (!Raylib.WindowShouldClose())
         {
             Raylib.BeginDrawing();
-            Raylib.ClearBackground(Color.WHITE);
+            Raylib.ClearBackground(Color.White);
 
-            Raylib.DrawTexture(glyphTexture, screenWidth / 2 - glyphTexture.Width / 2, screenHeight / 2 - glyphTexture.Height / 2, Color.WHITE);
+            Raylib.DrawTexture(glyphTexture, screenWidth / 2 - glyphTexture.Width / 2, screenHeight / 2 - glyphTexture.Height / 2, Color.White);
             Raylib.EndDrawing();
         }
 
